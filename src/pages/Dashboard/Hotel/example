@@ -1,0 +1,60 @@
+useEffect(() => {
+    const promise = getTickets(token);
+    promise
+      .then((res) => {
+        setTicket(res.data);
+
+        if (res.status === 'PAID') setTicketStatus(true);
+        if (res.TicketType.isRemote) setRemoteStatus(true);
+      })
+      .catch((error) => {
+        if (error.status === 404) setTicket(false);
+      });
+  }, []);
+
+  setTicket({
+    status: 'RESERVED',
+    TicketType: {
+      isRemote: true
+    }
+  });
+
+  useEffect(() => {
+    const promise = getHotels(token);
+    promise
+      .then((res) => {
+        setHotels(res.data);
+      })
+      .catch((error) => {
+        if (error.status === 404) setHotels(false);
+      });
+  }, []);
+
+  setHotels([{
+    id: 1,
+    name: 'Driven Resort',
+    image: 'https://pix10.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg?ca=6&ce=1&s=1024x768'
+  },
+  {
+    id: 2,
+    name: 'Driven Palace',
+    image: 'https://pix10.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg?ca=6&ce=1&s=1024x768'
+  },
+  {
+    id: 3,
+    name: 'Driven World',
+    image: 'https://pix10.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg?ca=6&ce=1&s=1024x768'
+  }
+  ]);
+
+
+  useEffect(() => {
+    const promise = getHotelsWithRooms(token, idHotel);
+    promise
+      .then((res) => {
+        setRooms(res.data);
+      })
+      .catch((error) => {
+        if (error.status === 404) setRooms(false);
+      });
+  }, []);
