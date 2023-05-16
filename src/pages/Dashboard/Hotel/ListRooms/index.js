@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { getHotelsWithRooms } from '../../../../services/hotelApi';
 import { Container, Room, Capacity, Text } from './style';
-import { FaUser } from 'react-icons/fa';
+import { FaRegUser, FaUser } from 'react-icons/fa';
 
 export function ListRooms({ token, hotelId }) {
   if (!hotelId) return <></>;
@@ -25,8 +25,9 @@ export function ListRooms({ token, hotelId }) {
   function capacity(qtd) {
     const capacityUser = [];
     for (let i = 0; i < qtd; i++) {
-      capacityUser.push(<FaUser name="person" />);
+      capacityUser.push(<FaRegUser />);
     }
+    <FaUser />;
     return capacityUser;
   }
 
