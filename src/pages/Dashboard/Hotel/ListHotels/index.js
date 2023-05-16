@@ -15,9 +15,6 @@ import {
 
 export function ListHotels({ token }) {
   const [hotels, setHotels] = useState();
-  const [typeRooms, setTypeRooms] = useState('Single, Double e Triple');
-  const [onRooms, setOnRooms] = useState('100');
-  const [selectedHotel, setSelectedHotel] = useState();
   const [hotelId, setHotelId] = useState();
 
   useEffect(() => {
@@ -31,8 +28,21 @@ export function ListHotels({ token }) {
   }, []);
 
   function selectHotel(hotel) {
-    setSelectedHotel(hotel);
     setHotelId(hotel.id);
+  }
+
+  function getRoomsTypes(hotel) {
+    const roomsTypes = [];
+    if (hotel.Rooms.some((e) => e.capacity === 1)) roomsTypes.push('Single');
+    if (hotel.Rooms.some((e) => e.capacity === 2)) roomsTypes.push('Double');
+    if (hotel.Rooms.some((e) => e.capacity === 3)) roomsTypes.push('Triple');
+    return roomsTypes.join(', ');
+  }
+
+  function getCapacity(hotel) {
+    let capacity = 0;
+    hotel.Rooms.map((e) => (capacity += e.capacity));
+    return capacity.toString();
   }
 
   return (
@@ -52,11 +62,11 @@ export function ListHotels({ token }) {
                   <HotelName>{h.name}</HotelName>
                   <RoomsInfo>
                     <h2>Tipo de acomodação:</h2>
-                    <p>{typeRooms}</p>
+                    <p>{getRoomsTypes(h)}</p>
                   </RoomsInfo>
                   <RoomsInfo>
                     <h2>Vagas disponíveis:</h2>
-                    <p>{onRooms}</p>
+                    <p>{getCapacity(h)}</p>
                   </RoomsInfo>
                 </Information>
               </HotelContainer>
