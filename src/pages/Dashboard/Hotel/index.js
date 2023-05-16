@@ -5,11 +5,9 @@ import useToken from '../../../hooks/useToken';
 import { StyledTypography } from '../../../components/PersonalInformationForm';
 import { getTickets } from '../../../services/ticketApi';
 import { ListHotels } from './ListHotels';
-import { useParams } from 'react-router-dom';
 
 export default function Hotels() {
   const token = useToken();
-  const { idHotel } = useParams();
   const [remoteStatus, setRemoteStatus] = useState(false);
   const [ticketStatus, setTicketStatus] = useState(true);
   const [ticket, setTicket] = useState();
@@ -46,7 +44,7 @@ export default function Hotels() {
           </Text>
         </Container>
       ) : (
-        <ListHotels idHotel={idHotel} token={token} />
+        <ListHotels token={token} />
       )}
     </>
   );
