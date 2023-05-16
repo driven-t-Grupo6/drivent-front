@@ -4,11 +4,13 @@ import { getHotelsWithRooms } from '../../../../services/hotelApi';
 import { Container, Room, Capacity, Text } from './style';
 import { FaUser } from 'react-icons/fa';
 
-export function ListRooms({ token, hotel }) {
+export function ListRooms({ token, hotelId }) {
+  if (!hotelId) return <></>;
+
   const [rooms, setRooms] = useState();
 
   useEffect(() => {
-    const promise = getHotelsWithRooms(token, hotel.id);
+    const promise = getHotelsWithRooms(token, hotelId);
     promise
       .then((res) => {
         setRooms(res.Rooms);
@@ -16,7 +18,7 @@ export function ListRooms({ token, hotel }) {
       .catch((error) => {
         if (error.status === 404) setRooms(false);
       });
-  }, []);
+  }, [hotelId]);
 
   if (!rooms) return <>Carregando...</>;
 

@@ -2,13 +2,23 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { ListRooms } from '../ListRooms';
 import { getHotels } from '../../../../services/hotelApi';
-import { Container, Text, HotelSelect, Hotel, Information } from './style';
+import {
+  HotelListContainer,
+  Text,
+  HotelContainer,
+  Information,
+  Container,
+  HotelImage,
+  HotelName,
+  RoomsInfo,
+} from './style';
 
-export function ListHotels({ token, idHotel }) {
+export function ListHotels({ token }) {
   const [hotels, setHotels] = useState();
   const [typeRooms, setTypeRooms] = useState('Single, Double e Triple');
   const [onRooms, setOnRooms] = useState('100');
   const [selectedHotel, setSelectedHotel] = useState();
+  const [hotelId, setHotelId] = useState();
 
   useEffect(() => {
     getHotels(token)
@@ -20,52 +30,9 @@ export function ListHotels({ token, idHotel }) {
       });
   }, []);
 
-  if (selectedHotel) {
-    return (
-      <>
-        {!hotels ? (
-          <Container>
-            <Text>Ainda não há hoteis cadastrados.</Text>
-          </Container>
-        ) : (
-          <>
-            <Text>Primeiro, escolha seu hotel</Text>
-            <Container>
-              {hotels.map((h) =>
-                h.id === idHotel ? (
-                  <div key={h.id}>
-                    <HotelSelect>
-                      <img src={h.image} alt="Imagem Hotel" />
-                      <Information>
-                        <h1>{h.name}</h1>
-                        <strong>Tipo de acomodação:</strong>
-                        <p>{typeRooms}</p>
-                        <strong>Vagas disponíveis:</strong>
-                        <p>{onRooms}</p>
-                      </Information>
-                    </HotelSelect>
-                  </div>
-                ) : (
-                  <div key={h.id}>
-                    <Hotel>
-                      <img src={h.image} alt="Imagem Hotel" />
-                      <Information>
-                        <h1>{h.name}</h1>
-                        <strong>Tipo de acomodação:</strong>
-                        <p>{typeRooms}</p>
-                        <strong>Vagas disponíveis:</strong>
-                        <p>{onRooms}</p>
-                      </Information>
-                    </Hotel>
-                  </div>
-                )
-              )}
-            </Container>
-            <ListRooms token={token} hotel={selectedHotel} />
-          </>
-        )}
-      </>
-    );
+  function selectHotel(hotel) {
+    setSelectedHotel(hotel);
+    setHotelId(hotel.id);
   }
 
   return (
@@ -77,20 +44,25 @@ export function ListHotels({ token, idHotel }) {
       ) : (
         <>
           <Text>Primeiro, escolha seu hotel</Text>
-          <Container>
+          <HotelListContainer>
             {hotels.map((h) => (
-              <div onClick={() => setSelectedHotel(h)} key={h.id}>
-                <Hotel>
-                  <img src={h.image} alt="Imagem Hotel" />
-                  <h1>{h.name}</h1>
-                  <strong>Tipo de acomodação:</strong>
-                  <p>{typeRooms}</p>
-                  <strong>Vagas disponíveis:</strong>
-                  <p>{onRooms}</p>
-                </Hotel>
-              </div>
+              <HotelContainer onClick={() => selectHotel(h)} key={h.id} selected={h.id === hotelId}>
+                <HotelImage src={h.image} alt="Imagem Hotel" />
+                <Information>
+                  <HotelName>{h.name}</HotelName>
+                  <RoomsInfo>
+                    <h2>Tipo de acomodação:</h2>
+                    <p>{typeRooms}</p>
+                  </RoomsInfo>
+                  <RoomsInfo>
+                    <h2>Vagas disponíveis:</h2>
+                    <p>{onRooms}</p>
+                  </RoomsInfo>
+                </Information>
+              </HotelContainer>
             ))}
-          </Container>
+          </HotelListContainer>
+          <ListRooms token={token} hotelId={hotelId} />
         </>
       )}
     </>

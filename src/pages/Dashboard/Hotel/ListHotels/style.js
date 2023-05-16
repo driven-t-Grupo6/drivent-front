@@ -1,74 +1,63 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  height: 90%;
   display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+`;
+
+export const HotelListContainer = styled.div`
+  display: flex;
+  align-items: center;
   flex-wrap: wrap;
-  padding: 0 35px;
+  margin-bottom: 20px;
+  gap: 1.5rem;
 `;
 
 export const Text = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
   font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
   font-size: 20px;
-  text-align: center;
-
+  line-height: 23px;
   color: #8e8e8e;
+  margin: 2rem 0;
 `;
 
-export const Hotel = styled.div`
+export const HotelContainer = styled.div`
+  box-sizing: border-box;
   width: 196px;
   height: 264px;
-  padding: 16px 14px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  gap: 0.1rem;
+  padding: 1rem 0;
 
-  background: #ebebeb;
+  background: ${(props) => (!props.selected ? '#ebebeb' : '#ffeed2')};
   border-radius: 10px;
 
-  img {
-    width: 168px;
-    height: 109px;
-    border-radius: 5px;
-  }
-  h1 {
-    font-family: 'Roboto';
-    font-size: 20px;
-    font-weight: 400px;
-    color: #343434;
-    margin: 2px;
-  }
-  strong {
+  font-family: 'Roboto';
+
+  h2 {
     font-family: 'Roboto';
     font-weight: 700;
     font-size: 12px;
     color: #3c3c3c;
-    margin: 2px;
   }
   p {
     font-family: 'Roboto';
     font-weight: 400;
     font-size: 12px;
     color: #3c3c3c;
-    margin: 2px;
   }
 `;
 
-export const HotelSelect = styled.div`
-  width: 196px;
-  height: 264px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  background: #ffeed2;
-  border-radius: 10px;
+export const HotelImage = styled.img`
+  width: 168px;
+  aspect-ratio: 1.5;
+  border-radius: 5px;
 `;
 
 export const Information = styled.div`
@@ -77,5 +66,17 @@ export const Information = styled.div`
   padding: 10px 12px 22px 12px;
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  gap: 0.9rem;
+`;
+
+export const HotelName = styled.h1`
+  font-size: 20px;
+  font-weight: 400px;
+  color: #343434;
+`;
+
+export const RoomsInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
 `;

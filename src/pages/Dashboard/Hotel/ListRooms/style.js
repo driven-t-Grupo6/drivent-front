@@ -2,22 +2,19 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   box-sizing: border-box;
-  height: 90%;
   display: flex;
   flex-wrap: wrap;
-  padding: 0.25rem;
+  gap: 0.5rem 1rem;
 `;
 
 export const Text = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
   font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
   font-size: 20px;
-  text-align: center;
-
+  line-height: 23px;
   color: #8e8e8e;
+  margin: 2rem 0;
 `;
 
 export const Room = styled.div`
