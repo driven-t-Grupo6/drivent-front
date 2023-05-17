@@ -5,9 +5,12 @@ import useToken from '../../../hooks/useToken';
 import { StyledTypography } from '../../../components/PersonalInformationForm';
 import { getTickets } from '../../../services/ticketApi';
 import { ListHotels } from './ListHotels';
+import { getBooking } from '../../../services/bookingApi';
+import { HotelReserved } from './HotelReservation';
 
 export default function Hotels() {
   const token = useToken();
+  const [booking, setBooking] = useState(false);
   const [remoteStatus, setRemoteStatus] = useState(false);
   const [ticketStatus, setTicketStatus] = useState(true);
   const [ticket, setTicket] = useState();
@@ -24,9 +27,18 @@ export default function Hotels() {
       .catch((error) => {
         if (error.status === 404) setTicket(false);
       });
+    getBooking(token)
+      .then((res) => {
+        setBooking(res);
+      })
+      .catch((error) => {
+        if (error.status === 404) setBooking(false);
+      });
   }, []);
 
   if (!ticket) return <>Carregando...</>;
+
+  if (booking) return <HotelReserved booking={booking} />;
 
   return (
     <>
