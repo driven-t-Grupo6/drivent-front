@@ -14,11 +14,13 @@ import { useEffect, useState } from 'react';
 import useToken from '../../../../hooks/useToken';
 import { getHotelsByRoomId } from '../../../../services/hotelApi';
 import { getBookingByRoomId } from '../../../../services/bookingApi';
+import { ListHotels } from '../ListHotels';
 
 export function HotelReserved({ booking }) {
   const [hotel, setHotel] = useState(false);
   const [usage, setUsage] = useState(0);
   const token = useToken();
+  const [changeRoom, setChangeRoom] = useState(false);
 
   useEffect(() => {
     getHotelsByRoomId(token, booking.Room.id)
@@ -52,6 +54,14 @@ export function HotelReserved({ booking }) {
     if (usage > 1) return `Você e mais ${withUser}`;
   }
 
+  function handleChangeRoom() {
+    setChangeRoom(true);
+  }
+
+  if (changeRoom) {
+    return <ListHotels />;
+  }
+
   return (
     <>
       <StyledTypography variant="h4"> Escolha de hotel e quarto </StyledTypography>
@@ -76,7 +86,7 @@ export function HotelReserved({ booking }) {
       </HotelListContainer>
       <Container>
         <Button>
-          <h5>TROCAR DE QUARTO</h5>
+          <h5 onClick={handleChangeRoom}>TROCAR DE QUARTO</h5>
         </Button>
       </Container>
     </>

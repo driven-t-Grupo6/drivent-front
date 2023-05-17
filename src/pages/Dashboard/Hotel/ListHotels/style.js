@@ -34,6 +34,7 @@ export const HotelContainer = styled.div`
   justify-content: space-between;
   gap: 0.1rem;
   padding: 1rem 0;
+  cursor: pointer;
 
   background: ${(props) => (!props.selected ? '#ebebeb' : '#ffeed2')};
   border-radius: 10px;
