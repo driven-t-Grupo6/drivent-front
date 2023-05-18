@@ -23,6 +23,7 @@ export function HotelReserved({ booking }) {
   const [changeRoom, setChangeRoom] = useState(false);
 
   useEffect(() => {
+    setChangeRoom(false);
     getHotelsByRoomId(token, booking.Room.id)
       .then((res) => {
         setHotel(res);
@@ -59,7 +60,7 @@ export function HotelReserved({ booking }) {
   }
 
   if (changeRoom) {
-    return <ListHotels />;
+    return <ListHotels token={token}/>;
   }
 
   return (
