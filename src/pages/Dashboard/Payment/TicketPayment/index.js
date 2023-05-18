@@ -11,6 +11,7 @@ function PaymentForm({ ticket }) {
   const token = useToken();
   const [userTicket, setUserTicket] = useState(ticket);
   const [paid, setPaid] = useState(false);
+  const [issuer, setIssuer] = useState('');
   const [state, setState] = useState({
     number: '',
     expiry: '',
@@ -34,14 +35,18 @@ function PaymentForm({ ticket }) {
   const handleInputFocus = (evt) => {
     setState((prev) => ({ ...prev, focus: evt.target.name }));
   };
+  const handleCardIssuer = (cardIssuer) => {
+    setIssuer(cardIssuer.issuer);
+  };
 
   async function finalizePayment() {
     if (state.number.length !== 16 || state.cvc.length !== 3 || state.expiry.length !== 4 || state.name.length === 0) {
       return alert('Dados do cartão inválidos');
     }
     const cardData = {
-      issuer: state.name,
+      issuer: issuer,
       number: state.number,
+      name: state.name,
       expirationDate: state.expiry,
       cvv: state.cvc,
     };
@@ -74,6 +79,7 @@ function PaymentForm({ ticket }) {
                 cvc={state.cvc}
                 name={state.name}
                 focused={state.focus}
+                callback={handleCardIssuer}
               />
               <form>
                 <input

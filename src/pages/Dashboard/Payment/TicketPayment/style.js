@@ -75,10 +75,10 @@ const ConfirmeIcon = styled(AiFillCheckCircle)`
 `;
 const CardContent = styled.div`
   display: flex;
+  width: 660px;
   form {
     display: flex;
     justify-content: space-between;
-    width: 350px;
     flex-wrap: wrap;
     margin-left: 30px;
     h5 {
@@ -87,7 +87,7 @@ const CardContent = styled.div`
       color: gray;
     }
     input {
-      width: 100%;
+      width: 340px;
       height: 48px;
       background: #ffffff;
       border: 2px solid #d5d5d5;
