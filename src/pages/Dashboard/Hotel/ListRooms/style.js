@@ -40,4 +40,5 @@ export const Capacity = styled.div`
   font-size: 20px;
   display: flex;
   gap: 0.1rem;
+  cursor: pointer;
 `;
