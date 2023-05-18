@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
-import { PaymentContent, TicketContent, PaymentConfirme, ConfirmeIcon } from './style';
+import React, { useState, useEffect } from 'react';
+import { PaymentContent, TicketContent, CardContent } from './style';
 import useToken from '../../../../hooks/useToken';
+import PaidPage from '../../../../components/Dashboard/Payment/PaidPage';
 import { createPaymentParams } from '../../../../services/paymentApi';
-import PaymentTest from '../../../../components/Dashboard/Payment/PaymentForm';
+import Cards from 'react-credit-cards-2';
+import 'react-credit-cards-2/dist/es/styles-compiled.css';
 
 function PaymentForm({ ticket }) {
-  const ticketPriceAjust = 1000; //ticket.TicketType.price / 100;
+  const ticketPriceAjust = ticket.TicketType.price / 100;
   const token = useToken();
-  const [issuer, setIssuer] = useState('');
   const [userTicket, setUserTicket] = useState(ticket);
-
+  const [paid, setPaid] = useState(false);
   const [state, setState] = useState({
     number: '',
     expiry: '',
@@ -18,51 +19,40 @@ function PaymentForm({ ticket }) {
     focus: '',
   });
 
-  function Paid() {
-    return (
-      <>
-        <PaymentConfirme>
-          <ConfirmeIcon />
-          <p>
-            <strong>Pagamento confirmado!</strong>
-            <br />
-            Prossiga para escolha de hospedagem e atividades
-          </p>
-        </PaymentConfirme>
-      </>
-    );
-  }
-  function Reserve() {
-    return (
-      <>
-        <PaymentTest state={state} setState={setState} />
-        <button onClick={finalizePayment}>
-          <p>FINALIZAR PAGAMENTO</p>
-        </button>
-      </>
-    );
-  }
+  useEffect(() => {
+    if (ticket.status === 'PAID') {
+      setPaid(true);
+    }
+  }, []);
 
-  function PaymentRender() {
-    if (userTicket === 'PAID') return Paid();
-    return Reserve();
-  }
-  async function finalizePayment(e) {
-    /*e.preventDefault();
+  const handleInputChange = (evt) => {
+    const { name, value } = evt.target;
+
+    setState((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleInputFocus = (evt) => {
+    setState((prev) => ({ ...prev, focus: evt.target.name }));
+  };
+
+  async function finalizePayment() {
+    if (state.number.length !== 16 || state.cvc.length !== 3 || state.expiry.length !== 4 || state.name.length === 0) {
+      return alert('Dados do cartão inválidos');
+    }
     const cardData = {
-      issuer: issuer,
-      number: number,
-      name: name,
-      expirationDate: expiry,
-      cvv: cvc,
+      issuer: state.name,
+      number: state.number,
+      expirationDate: state.expiry,
+      cvv: state.cvc,
     };
     const bodyRequest = { ticketId: ticket.id, cardData: cardData };
     try {
       await createPaymentParams(bodyRequest, token);
       setUserTicket({ ...userTicket, status: 'PAID' });
+      setPaid(true);
     } catch (error) {
       alert('Erro ao digitar os dados do cartão');
-    }*/
+    }
   }
 
   return (
@@ -71,11 +61,68 @@ function PaymentForm({ ticket }) {
         <h1>Ingresso e Pagamento</h1>
         <h2>Ingresso Escolhido</h2>
         <TicketContent>
-          <h3>Jorge</h3>
+          <h3>{ticket.TicketType.name}</h3>
           <h4>+ {ticketPriceAjust.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</h4>
         </TicketContent>
         <h2>Pagamento</h2>
-        <PaymentRender />
+        {!paid ? (
+          <>
+            <CardContent>
+              <Cards
+                number={state.number}
+                expiry={state.expiry}
+                cvc={state.cvc}
+                name={state.name}
+                focused={state.focus}
+              />
+              <form>
+                <input
+                  type="number"
+                  name="number"
+                  placeholder="Card Number"
+                  value={state.number}
+                  onChange={handleInputChange}
+                  onFocus={handleInputFocus}
+                />
+                <h5>E.g.: 49..., 51..., 36..., 37...</h5>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Name"
+                  value={state.name}
+                  onChange={handleInputChange}
+                  onFocus={handleInputFocus}
+                  minLength={5}
+                  maxLength={17}
+                />
+                <input
+                  type="number"
+                  name="expiry"
+                  placeholder="Valid Thru"
+                  value={state.expiry}
+                  onChange={handleInputChange}
+                  onFocus={handleInputFocus}
+                  className="validThru"
+                  mask="99/99"
+                />
+                <input
+                  type="number"
+                  name="cvc"
+                  placeholder="CVC"
+                  value={state.cvc}
+                  onChange={handleInputChange}
+                  onFocus={handleInputFocus}
+                  className="cvc"
+                />
+              </form>
+            </CardContent>
+            <button onClick={finalizePayment}>
+              <p>FINALIZAR PAGAMENTO</p>
+            </button>
+          </>
+        ) : (
+          <PaidPage />
+        )}
       </PaymentContent>
     </>
   );
