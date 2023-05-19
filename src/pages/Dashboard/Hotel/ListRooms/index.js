@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { getHotelsWithRooms } from '../../../../services/hotelApi';
-import { Container, Room, Capacity, Text } from './style';
-import { FaRegUser, FaUser } from 'react-icons/fa';
+import { Container, Text, Button } from './style';
+import RoomContainer from '../../../../components/Dashboard/Room/RoomContainer';
+import { createBooking } from '../../../../services/bookingApi';
 
-export function ListRooms({ token, hotelId }) {
+export function ListRooms({ token, hotelId, booking, selectedRoom, setSelectedRoom, setUpdateBooking }) {
   if (!hotelId) return <></>;
 
   const [rooms, setRooms] = useState();
@@ -22,25 +23,34 @@ export function ListRooms({ token, hotelId }) {
 
   if (!rooms) return <>Carregando...</>;
 
-  function capacity(qtd) {
-    const capacityUser = [];
-    for (let i = 0; i < qtd; i++) {
-      capacityUser.push(<FaRegUser />);
-    }
-    <FaUser />;
-    return capacityUser;
+  async function book() {
+    await createBooking(token, selectedRoom);
+    setUpdateBooking();
   }
 
   return (
     <>
       <Text>Ótima pedida! Agora escolha seu quarto:</Text>
       <Container>
-        {rooms.map((r) => (
-          <Room key={r.id}>
-            <p>{r.id}</p>
-            <Capacity>{capacity(r.capacity).map((r) => r)}</Capacity>
-          </Room>
+        {rooms.map((room) => (
+          <RoomContainer
+            key={room.id}
+            room={room}
+            token={token}
+            booking={booking}
+            selectedRoom={selectedRoom}
+            setSelectedRoom={setSelectedRoom}
+          />
         ))}
+      </Container>
+      <Container>
+        {selectedRoom ? (
+          <Button onClick={book}>
+            <h5>RESERVAR QUARTO</h5>
+          </Button>
+        ) : (
+          <></>
+        )}
       </Container>
     </>
   );

@@ -13,9 +13,10 @@ import {
   RoomsInfo,
 } from './style';
 
-export function ListHotels({ token }) {
+export function ListHotels({ booking, token, setUpdateBooking }) {
   const [hotels, setHotels] = useState();
   const [hotelId, setHotelId] = useState();
+  const [selectedRoom, setSelectedRoom] = useState(0);
 
   useEffect(() => {
     getHotels(token)
@@ -72,7 +73,14 @@ export function ListHotels({ token }) {
               </HotelContainer>
             ))}
           </HotelListContainer>
-          <ListRooms token={token} hotelId={hotelId} />
+          <ListRooms
+            token={token}
+            hotelId={hotelId}
+            booking={booking}
+            selectedRoom={selectedRoom}
+            setSelectedRoom={setSelectedRoom}
+            setUpdateBooking={setUpdateBooking}
+          />
         </>
       )}
     </>

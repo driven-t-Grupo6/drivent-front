@@ -60,7 +60,7 @@ export function HotelReserved({ booking }) {
   }
 
   if (changeRoom) {
-    return <ListHotels token={token}/>;
+    return <ListHotels booking={booking} token={token} />;
   }
 
   return (
