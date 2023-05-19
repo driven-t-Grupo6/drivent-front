@@ -17,28 +17,23 @@ export const Text = styled.div`
   margin: 2rem 0;
 `;
 
-export const Room = styled.div`
-  box-sizing: border-box;
-  padding: 0.55rem;
-  width: 190px;
-  height: 45px;
+export const Button = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  border: 1px solid #cecece;
-  border-radius: 10px;
-  p {
-    font-family: 'Roboto';
-    font-weight: 700;
-    font-size: 20px;
-    text-align: center;
-    color: #454545;
-  }
-`;
-
-export const Capacity = styled.div`
-  font-size: 20px;
-  display: flex;
-  gap: 0.1rem;
+  width: 162px;
+  height: 37px;
+  background: #e0e0e0;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
   cursor: pointer;
+  margin-top: 20px;
+  h5 {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #000000;
+  }
 `;
