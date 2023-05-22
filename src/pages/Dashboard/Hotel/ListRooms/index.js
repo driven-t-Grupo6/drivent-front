@@ -32,9 +32,11 @@ export function ListRooms({
   if (!rooms) return <>Carregando...</>;
 
   async function book() {
-    if (selectedRoom === booking.Room.id) return alert('Escolha um quarto diferente');
     if (!changeBookingStatus) await createBooking(token, selectedRoom);
-    if (changeBookingStatus) await changeBooking(token, booking.id, selectedRoom);
+    if (changeBookingStatus) {
+      await changeBooking(token, booking.id, selectedRoom);
+      if (selectedRoom === booking.Room.id) return alert('Escolha um quarto diferente');
+    }
     setUpdateBooking();
   }
 

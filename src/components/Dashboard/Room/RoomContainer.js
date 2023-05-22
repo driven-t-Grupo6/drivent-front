@@ -37,7 +37,7 @@ function RoomContainer({ room, token, booking, selectedRoom, setSelectedRoom }) 
       }
     }
 
-    if (selectedRoom === room.id) iconsList.push(<FaUser key={'usericon'} color="red" />);
+    if (selectedRoom === room.id) iconsList.push(<FaUser key={'usericon'} color="FF4791" />);
     setCapacityUser(iconsList);
   }, [bookings, selectedRoom]);
 
@@ -47,7 +47,7 @@ function RoomContainer({ room, token, booking, selectedRoom, setSelectedRoom }) 
   }
   return (
     <Room key={room.id} onClick={selectRoom} isFilled={isFilled} isUserBooking={selectedRoom === room.id}>
-      <p>{room.id}</p>
+      <p>{room.name}</p>
       <Capacity>{capacityUser.map((r) => r)}</Capacity>
     </Room>
   );
