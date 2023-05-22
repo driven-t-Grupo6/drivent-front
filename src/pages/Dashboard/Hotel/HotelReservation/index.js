@@ -16,7 +16,7 @@ import { getHotelsByRoomId } from '../../../../services/hotelApi';
 import { getBookingByRoomId } from '../../../../services/bookingApi';
 import { ListHotels } from '../ListHotels';
 
-export function HotelReserved({ booking }) {
+export function HotelReserved({ booking, setUpdateBooking }) {
   const [hotel, setHotel] = useState(false);
   const [usage, setUsage] = useState(0);
   const token = useToken();
@@ -60,7 +60,9 @@ export function HotelReserved({ booking }) {
   }
 
   if (changeRoom) {
-    return <ListHotels booking={booking} token={token} />;
+    return (
+      <ListHotels booking={booking} token={token} setUpdateBooking={setUpdateBooking} changeBookingStatus={true} />
+    );
   }
 
   return (

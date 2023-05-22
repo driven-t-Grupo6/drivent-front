@@ -13,7 +13,7 @@ import {
   RoomsInfo,
 } from './style';
 
-export function ListHotels({ booking, token, setUpdateBooking }) {
+export function ListHotels({ booking, token, changeBookingStatus, setUpdateBooking }) {
   const [hotels, setHotels] = useState();
   const [hotelId, setHotelId] = useState();
   const [selectedRoom, setSelectedRoom] = useState(0);
@@ -79,6 +79,7 @@ export function ListHotels({ booking, token, setUpdateBooking }) {
             booking={booking}
             selectedRoom={selectedRoom}
             setSelectedRoom={setSelectedRoom}
+            changeBookingStatus={changeBookingStatus}
             setUpdateBooking={setUpdateBooking}
           />
         </>
