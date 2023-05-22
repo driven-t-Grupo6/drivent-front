@@ -26,18 +26,18 @@ function RoomContainer({ room, token, booking, selectedRoom, setSelectedRoom }) 
     const roomIcon = selectedRoom === room.id ? 1 : 0;
     if (!bookings) {
       for (let i = 0; i < room.capacity - roomIcon + rIForUserBook; i++) {
-        iconsList.push(<FaRegUser />);
+        iconsList.push(<FaRegUser key={`emptyicon${i}`} />);
       }
     } else if (bookings) {
       for (let i = 0; i < room.capacity - bookings - roomIcon + rIForUserBook; i++) {
-        iconsList.push(<FaRegUser />);
+        iconsList.push(<FaRegUser key={`emptyicon${i}`} />);
       }
       for (let i = 0; i < bookings - rIForUserBook; i++) {
-        iconsList.push(<FaUser />);
+        iconsList.push(<FaUser key={`icon${i}`} />);
       }
     }
 
-    if (selectedRoom === room.id) iconsList.push(<FaUser color="red" />);
+    if (selectedRoom === room.id) iconsList.push(<FaUser key={'usericon'} color="red" />);
     setCapacityUser(iconsList);
   }, [bookings, selectedRoom]);
 
@@ -46,7 +46,7 @@ function RoomContainer({ room, token, booking, selectedRoom, setSelectedRoom }) 
     if (!(selectedRoom === room.id)) setSelectedRoom(room.id);
   }
   return (
-    <Room onClick={selectRoom} key={room.id} isFilled={isFilled} isUserBooking={selectedRoom === room.id}>
+    <Room key={room.id} onClick={selectRoom} isFilled={isFilled} isUserBooking={selectedRoom === room.id}>
       <p>{room.id}</p>
       <Capacity>{capacityUser.map((r) => r)}</Capacity>
     </Room>

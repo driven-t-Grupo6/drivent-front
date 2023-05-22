@@ -11,10 +11,10 @@ import { HotelReserved } from './HotelReservation';
 export default function Hotels() {
   const token = useToken();
   const [booking, setBooking] = useState(false);
-  const [updateBooking, setUpdateBooking] = useState(false);
   const [remoteStatus, setRemoteStatus] = useState(false);
   const [ticketStatus, setTicketStatus] = useState(true);
   const [ticket, setTicket] = useState();
+  const [updateBooking, setUpdateBooking] = useState(false);
 
   useEffect(() => {
     getTickets(token)
@@ -35,7 +35,7 @@ export default function Hotels() {
       .catch((error) => {
         if (error.status === 404) setBooking(false);
       });
-  }, []);
+  }, [updateBooking]);
 
   useEffect(() => {
     getBooking(token)
@@ -45,11 +45,11 @@ export default function Hotels() {
       .catch((error) => {
         if (error.status === 404) setBooking(false);
       });
-  }, [updateBooking]);
+  }, []);
 
   if (!ticket) return <>Carregando...</>;
 
-  if (booking) return <HotelReserved booking={booking} />;
+  if (booking) return <HotelReserved booking={booking} setUpdateBooking={setUpdateBooking} />;
 
   return (
     <>
@@ -67,7 +67,7 @@ export default function Hotels() {
           </Text>
         </Container>
       ) : (
-        <ListHotels booking={booking} token={token} setUpdateBooking={setUpdateBooking} />
+        <ListHotels booking={booking} token={token} setUpdateBooking={setUpdateBooking} changeBookingStatus={false} />
       )}
     </>
   );

@@ -3,9 +3,17 @@ import { useEffect } from 'react';
 import { getHotelsWithRooms } from '../../../../services/hotelApi';
 import { Container, Text, Button } from './style';
 import RoomContainer from '../../../../components/Dashboard/Room/RoomContainer';
-import { createBooking } from '../../../../services/bookingApi';
+import { changeBooking, createBooking } from '../../../../services/bookingApi';
 
-export function ListRooms({ token, hotelId, booking, selectedRoom, setSelectedRoom, setUpdateBooking }) {
+export function ListRooms({
+  token,
+  hotelId,
+  booking,
+  selectedRoom,
+  setSelectedRoom,
+  changeBookingStatus,
+  setUpdateBooking,
+}) {
   if (!hotelId) return <></>;
 
   const [rooms, setRooms] = useState();
@@ -24,7 +32,9 @@ export function ListRooms({ token, hotelId, booking, selectedRoom, setSelectedRo
   if (!rooms) return <>Carregando...</>;
 
   async function book() {
-    await createBooking(token, selectedRoom);
+    if (selectedRoom === booking.Room.id) return alert('Escolha um quarto diferente');
+    if (!changeBookingStatus) await createBooking(token, selectedRoom);
+    if (changeBookingStatus) await changeBooking(token, booking.id, selectedRoom);
     setUpdateBooking();
   }
 
