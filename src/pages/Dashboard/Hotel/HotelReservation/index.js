@@ -77,7 +77,7 @@ export function HotelReserved({ booking, setUpdateBooking }) {
             <RoomsInfo>
               <h2>Quarto reservado</h2>
               <p>
-                {booking.Room.id} ({getRoomType()})
+                {booking.Room.name} ({getRoomType()})
               </p>
             </RoomsInfo>
             <RoomsInfo>
