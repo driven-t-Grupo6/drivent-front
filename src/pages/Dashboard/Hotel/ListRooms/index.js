@@ -35,6 +35,7 @@ export function ListRooms({
     if (selectedRoom === booking.Room.id) return alert('Escolha um quarto diferente');
     if (!changeBookingStatus) await createBooking(token, selectedRoom);
     if (changeBookingStatus) await changeBooking(token, booking.id, selectedRoom);
+
     setUpdateBooking();
   }
 
