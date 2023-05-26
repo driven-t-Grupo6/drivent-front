@@ -1,4 +1,4 @@
-import { StyledTypography } from '../../../../components/PersonalInformationForm';
+import { StyledTypography } from '../../PersonalInformationForm';
 import {
   Container,
   HotelContainer,
@@ -11,19 +11,18 @@ import {
   Button,
 } from './style';
 import { useEffect, useState } from 'react';
-import useToken from '../../../../hooks/useToken';
-import { getHotelsByRoomId } from '../../../../services/hotelApi';
-import { getBookingByRoomId } from '../../../../services/bookingApi';
-import { ListHotels } from '../ListHotels';
+import useToken from '../../../hooks/useToken';
+import { getHotelsByRoomId } from '../../../services/hotelApi';
+import { getBookingByRoomId } from '../../../services/bookingApi';
+import { useNavigate } from 'react-router-dom';
 
-export function HotelReserved({ booking, setUpdateBooking }) {
+export function BookingInfoPage({ booking }) {
   const [hotel, setHotel] = useState(false);
   const [usage, setUsage] = useState(0);
   const token = useToken();
-  const [changeRoom, setChangeRoom] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    setChangeRoom(false);
     getHotelsByRoomId(token, booking.Room.id)
       .then((res) => {
         setHotel(res);
@@ -56,13 +55,7 @@ export function HotelReserved({ booking, setUpdateBooking }) {
   }
 
   function handleChangeRoom() {
-    setChangeRoom(true);
-  }
-
-  if (changeRoom) {
-    return (
-      <ListHotels booking={booking} token={token} setUpdateBooking={setUpdateBooking} changeBookingStatus={true} />
-    );
+    navigate('/dashboard/hotel?change=true');
   }
 
   return (

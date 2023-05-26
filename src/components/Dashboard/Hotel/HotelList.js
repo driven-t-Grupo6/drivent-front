@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { ListRooms } from '../ListRooms';
-import { getHotels } from '../../../../services/hotelApi';
+import { ListRooms } from './RoomList';
+import { getHotels } from '../../../services/hotelApi';
 import {
   HotelListContainer,
   Text,
@@ -13,7 +13,7 @@ import {
   RoomsInfo,
 } from './style';
 
-export function ListHotels({ booking, token, changeBookingStatus, setUpdateBooking }) {
+export function ListHotels({ booking, token, changeBookingStatus }) {
   const [hotels, setHotels] = useState();
   const [hotelId, setHotelId] = useState();
   const [selectedRoom, setSelectedRoom] = useState(0);
@@ -80,7 +80,6 @@ export function ListHotels({ booking, token, changeBookingStatus, setUpdateBooki
             selectedRoom={selectedRoom}
             setSelectedRoom={setSelectedRoom}
             changeBookingStatus={changeBookingStatus}
-            setUpdateBooking={setUpdateBooking}
           />
         </>
       )}

@@ -1,22 +1,16 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { getHotelsWithRooms } from '../../../../services/hotelApi';
-import { Container, Text, Button } from './style';
-import RoomContainer from '../../../../components/Dashboard/Room/RoomContainer';
-import { changeBooking, createBooking } from '../../../../services/bookingApi';
+import { getHotelsWithRooms } from '../../../services/hotelApi';
+import { ContainerRooms, Text, Button } from './style';
+import RoomContainer from '../Room/RoomContainer';
+import { changeBooking, createBooking } from '../../../services/bookingApi';
+import { useNavigate } from 'react-router-dom';
 
-export function ListRooms({
-  token,
-  hotelId,
-  booking,
-  selectedRoom,
-  setSelectedRoom,
-  changeBookingStatus,
-  setUpdateBooking,
-}) {
+export function ListRooms({ token, hotelId, booking, selectedRoom, setSelectedRoom, changeBookingStatus }) {
   if (!hotelId) return <></>;
 
   const [rooms, setRooms] = useState();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const promise = getHotelsWithRooms(token, hotelId);
@@ -32,17 +26,21 @@ export function ListRooms({
   if (!rooms) return <>Carregando...</>;
 
   async function book() {
-    if (selectedRoom === booking.Room.id) return alert('Escolha um quarto diferente');
-    if (!changeBookingStatus) await createBooking(token, selectedRoom);
-    if (changeBookingStatus) await changeBooking(token, booking.id, selectedRoom);
-
-    setUpdateBooking();
+    if (!changeBookingStatus) {
+      if (booking) return alert('Você já tem uma reserva, se está tentando alterar atualize a pagina!');
+      await createBooking(token, selectedRoom);
+    }
+    if (changeBookingStatus) {
+      if (selectedRoom === booking.Room.id) return alert('Escolha um quarto diferente');
+      await changeBooking(token, booking.id, selectedRoom);
+    }
+    navigate('/dashboard/hotel/reservation');
   }
 
   return (
     <>
       <Text>Ótima pedida! Agora escolha seu quarto:</Text>
-      <Container>
+      <ContainerRooms>
         {rooms.map((room) => (
           <RoomContainer
             key={room.id}
@@ -53,8 +51,8 @@ export function ListRooms({
             setSelectedRoom={setSelectedRoom}
           />
         ))}
-      </Container>
-      <Container>
+      </ContainerRooms>
+      <ContainerRooms>
         {selectedRoom ? (
           <Button onClick={book}>
             <h5>RESERVAR QUARTO</h5>
@@ -62,7 +60,7 @@ export function ListRooms({
         ) : (
           <></>
         )}
-      </Container>
+      </ContainerRooms>
     </>
   );
 }
