@@ -37,7 +37,7 @@ function RoomContainer({ room, token, booking, selectedRoom, setSelectedRoom }) 
       }
     }
 
-    if (selectedRoom === room.id) iconsList.push(<FaUser key={'usericon'} color="FF4791" />);
+    if (selectedRoom === room.id) iconsList.push(<FaUser key={'usericon'} color="#FF4791" />);
     setCapacityUser(iconsList);
   }, [bookings, selectedRoom]);
 
