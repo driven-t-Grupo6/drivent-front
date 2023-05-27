@@ -2,16 +2,29 @@ import styled from 'styled-components';
 import { BiExit } from 'react-icons/bi';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 import dayjs from 'dayjs';
+import { useEffect, useState } from 'react';
+import { getEntriesByActivityId } from '../../../services/entriesApi';
+import useToken from '../../../hooks/useToken';
 
-export function ActivityCard({ activity, capacity }) {
-  const duration = dayjs(activity.endsAt).hour() - dayjs(activity.startsAt).hour();
+export function ActivityCard({ activity }) {
+  const token = useToken();
+  const startsAt = dayjs(activity.startsAt).add(3, 'hour');
+  const endsAt = dayjs(activity.endsAt).add(3, 'hour');
+  const duration = endsAt.hour() - startsAt.hour();
+  const [capacity, setCapacity] = useState(activity.capacity);
+
+  useEffect(() => {
+    getEntriesByActivityId(token, activity.id).then((res) => setCapacity(capacity - res.entries));
+  }, []);
+
+  function entry() {}
 
   return (
-    <Container duration={duration}>
+    <Container capacity={capacity} duration={duration}>
       <ActivityInfo>
         <h1>{activity.name}</h1>
         <div>
-          {dayjs(activity.startsAt).format('HH:mm')} - {dayjs(activity.endsAt).format('HH:mm')}
+          {startsAt.format('HH:mm')} - {endsAt.format('HH:mm')}
         </div>
       </ActivityInfo>
       <ActivityVacancy activity={activity} capacity={capacity}>
@@ -25,14 +38,15 @@ export function ActivityCard({ activity, capacity }) {
 const Container = styled.div`
   box-sizing: border-box;
   font-size: 'Roboto';
-  width: 265px;
-  height: ${(props) => `${props.duration * 79}px`};
+  width: 95%;
+  min-height: ${(props) => `${props.duration * 79}px`};
   background-color: #f1f1f1;
   border-radius: 5px;
   display: flex;
   justify-content: space-between;
   padding: 10px;
   gap: 15px;
+  cursor: ${(props) => (props.capacity ? 'pointer' : 'default')};
 `;
 
 const ActivityInfo = styled.div`

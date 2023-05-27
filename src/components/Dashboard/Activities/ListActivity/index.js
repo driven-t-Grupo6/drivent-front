@@ -6,17 +6,14 @@ import {
   ContainerActivitiesLeft,
   Text,
   Button,
-  Info,
-  InfoButton,
   BoxDiv,
-  Separation,
 } from './style';
+import { StyledTypography } from '../../../PersonalInformationForm/index.js';
 import { getActivitiesByDate } from '../../../../services/activitiesApi';
 import { toast } from 'react-toastify';
 import useToken from '../../../../hooks/useToken';
 import { useState } from 'react';
-import { Box } from '@material-ui/core';
-import { IoLogInOutline, IoCloseCircleOutline, IoCheckmarkCircleOutline } from 'react-icons/io5';
+import { ActivityCard } from '../ActivityCard';
 
 export function ListActivity({ dateInfo }) {
   const token = useToken();
@@ -24,7 +21,6 @@ export function ListActivity({ dateInfo }) {
   const [arrayPrincipal, setArrayPrincipal] = useState([]);
   const [arrayLateral, setArrayLateral] = useState([]);
   const [arrayWorkshop, setArrayWorkshop] = useState([]);
-  const [allActivities, setAllActivities] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   function handleDateChange(d) {
@@ -42,7 +38,6 @@ export function ListActivity({ dateInfo }) {
 
     try {
       const promiseActivity = await getActivitiesByDate(d.originalDate, token);
-      setAllActivities(promiseActivity);
 
       for (let i = 0; i < promiseActivity.length; i++) {
         promiseActivity[i].isSelected = false;
@@ -58,9 +53,9 @@ export function ListActivity({ dateInfo }) {
         }
       }
 
-      checkBoxSizeLateral(newLateral);
-      checkBoxSizePrincipal(newPrincipal);
-      checkBoxSizeWorkshop(newWorkshop);
+      setArrayPrincipal(newPrincipal);
+      setArrayLateral(newLateral);
+      setArrayWorkshop(newWorkshop);
 
       setIsLoading(false);
     } catch {
@@ -83,121 +78,9 @@ export function ListActivity({ dateInfo }) {
     return dates;
   }
 
-  function checkBoxSizePrincipal(a) {
-    let margin = 0;
-    let size = 0;
-    let newArray = [];
-    let firstHour = 9;
-    for (let i = 0; i < a.length; i++) {
-      if (i === 0) {
-        let diff = parseInt(a[i].startsAt) - firstHour;
-
-        let duration = parseInt(a[i].endsAt) - parseInt(a[i].startsAt);
-        size = duration * 80 + (duration - 1) * 10;
-
-        if (diff === 0) {
-          margin = 10;
-        } else {
-          margin = 80 * diff + 10 * diff + 10;
-        }
-      } else {
-        let diff = parseInt(a[i].startsAt) - parseInt(a[i - 1].endsAt);
-
-        let duration = parseInt(a[i].endsAt) - parseInt(a[i].startsAt);
-        size = duration * 80 + (duration - 1) * 10;
-
-        if (diff === 0) {
-          margin = 10;
-        } else {
-          margin = 80 * diff + 10 * diff;
-        }
-      }
-      newArray.push({ ...a[i], margin, size });
-    }
-    setArrayPrincipal(newArray);
-  }
-
-  function checkBoxSizeLateral(a) {
-    let margin = 0;
-    let size = 0;
-    let newArray = [];
-    let firstHour = 9;
-    for (let i = 0; i < a.length; i++) {
-      if (i === 0) {
-        let diff = parseInt(a[i].startsAt) - firstHour;
-
-        let duration = parseInt(a[i].endsAt) - parseInt(a[i].startsAt);
-
-        size = duration * 80 + (duration - 1) * 10;
-
-        if (diff === 0) {
-          margin = 10;
-        } else {
-          margin = 80 * diff + 10 * diff + 10;
-        }
-      } else {
-        let diff = parseInt(a[i].startsAt) - parseInt(a[i - 1].endsAt);
-
-        let duration = parseInt(a[i].endsAt) - parseInt(a[i].startsAt);
-        size = duration * 80 + (duration - 1) * 10;
-        if (diff === 0) {
-          margin = 10;
-        } else {
-          margin = 80 * diff + 10 * diff;
-        }
-      }
-      newArray.push({ ...a[i], margin, size });
-    }
-    setArrayLateral(newArray);
-  }
-
-  function checkBoxSizeWorkshop(a, b) {
-    let margin = 0;
-    let size = 0;
-    let newArray = [];
-    let firstHour = 9;
-    for (let i = 0; i < a.length; i++) {
-      if (i === 0) {
-        let diff = parseInt(a[i].startsAt) - firstHour;
-
-        let duration = parseInt(a[i].endsAt) - parseInt(a[i].startsAt);
-        size = duration * 80 + (duration - 1) * 10;
-
-        if (diff === 0) {
-          margin = 10;
-        } else {
-          margin = 80 * diff + 10 * diff + 10;
-        }
-      } else {
-        let diff = parseInt(a[i].startsAt) - parseInt(a[i - 1].endsAt);
-
-        let duration = parseInt(a[i].endsAt) - parseInt(a[i].startsAt);
-        size = duration * 80 + (duration - 1) * 10;
-        if (diff === 0) {
-          margin = 10;
-        } else {
-          margin = 80 * diff + 10 * diff;
-        }
-      }
-      newArray.push({ ...a[i], margin, size });
-    }
-    setArrayWorkshop(newArray);
-  }
-
-  async function handleClickActivity(id, thisActivity) {
-    if (thisActivity.Entry?.length === 1) {
-      toast('Você já está inscrito nesta atividade.');
-      return;
-    }
-
-    if (thisActivity.capacity === 0) {
-      toast.error('Não há vagas.');
-      return;
-    }
-  }
-
   return (
     <>
+      <StyledTypography variant="h4">Escolha de atividades</StyledTypography>
       <Text isSelected={isDateSelected}>Primeiro, filtre pelo dia do evento: </Text>
       <ContainerDate>
         {dateInfo?.map((d) => (
@@ -216,55 +99,7 @@ export function ListActivity({ dateInfo }) {
                 <h1>Auditório Principal</h1>
                 <ContainerActivitiesLeft>
                   {arrayPrincipal.map((a) => (
-                    <Box
-                      key={a.id}
-                      id={a.id}
-                      disabled={!a.capacity}
-                      isActivityFull={!a.capacity}
-                      isRoomSelected={a.isSelected}
-                      sx={{
-                        marginTop: `${a.margin}px`,
-                        height: `${a.size}px`,
-                        width: '275px',
-                        marginLeft: '12px',
-                        marginRight: '12px',
-                        marginBottom: '12px',
-                        borderRadius: '5px',
-                        backgroundColor: a.Entry.length === 1 ? '#D0FFDB' : '#f1f1f1',
-                        flexDirection: 'row',
-                        display: 'flex',
-                        padding: '12px',
-                        justifyContent: 'space-around',
-                        flexShrink: 0,
-                        color: 'black',
-                      }}
-                    >
-                      <Info>
-                        <h2>{a.name}</h2>
-                        <h3>
-                          {a.startsAt}:00 - {a.endsAt}:00
-                        </h3>
-                      </Info>
-                      <Separation arrayRegister={a.Entry.length} />
-                      <InfoButton arrayRegister={a.Entry.length} onClick={() => handleClickActivity(a.id, a)}>
-                        {a.capacity === 0 ? (
-                          <>
-                            <IoCloseCircleOutline color="#CC6666" size={30} />
-                            <h5>Esgotado</h5>
-                          </>
-                        ) : a.Entry.length === 1 ? (
-                          <>
-                            <IoCheckmarkCircleOutline color="#078632" size={30} />
-                            <h4>inscrito</h4>
-                          </>
-                        ) : (
-                          <>
-                            <IoLogInOutline color="#078632" size={30} />
-                            <h4>{a.capacity} vagas</h4>
-                          </>
-                        )}
-                      </InfoButton>
-                    </Box>
+                    <ActivityCard key={a.id} activity={a}/>
                   ))}
                 </ContainerActivitiesLeft>
               </BoxDiv>
@@ -272,55 +107,7 @@ export function ListActivity({ dateInfo }) {
                 <h1>Auditório Lateral</h1>
                 <ContainerActivitiesCenter>
                   {arrayLateral.map((a) => (
-                    <Box
-                      key={a.id}
-                      id={a.id}
-                      disabled={!a.capacity}
-                      isActivityFull={!a.capacity}
-                      isRoomSelected={a.isSelected}
-                      sx={{
-                        marginTop: `${a.margin}px`,
-                        height: `${a.size}px`,
-                        width: '280px',
-                        marginLeft: '12px',
-                        marginRight: '12px',
-                        marginBottom: '12px',
-                        borderRadius: '5px',
-                        backgroundColor: a.Entry.length === 1 ? '#D0FFDB' : '#f1f1f1',
-                        flexDirection: 'row',
-                        display: 'flex',
-                        padding: '12px',
-                        justifyContent: 'space-around',
-                        flexShrink: 0,
-                        color: 'black',
-                      }}
-                    >
-                      <Info>
-                        <h2>{a.name}</h2>
-                        <h3>
-                          {a.startsAt}:00 - {a.endsAt}:00
-                        </h3>
-                      </Info>
-                      <Separation arrayRegister={a.Entry.length} />
-                      <InfoButton arrayRegister={a.Entry.length} onClick={() => handleClickActivity(a.id, a)}>
-                        {a.capacity === 0 ? (
-                          <>
-                            <IoCloseCircleOutline color="#CC6666" size={30} />
-                            <h5>Esgotado</h5>
-                          </>
-                        ) : a.Entry.length === 1 ? (
-                          <>
-                            <IoCheckmarkCircleOutline color="#078632" size={30} />
-                            <h4>inscrito</h4>
-                          </>
-                        ) : (
-                          <>
-                            <IoLogInOutline color="#078632" size={30} />
-                            <h4>{a.capacity} vagas</h4>
-                          </>
-                        )}
-                      </InfoButton>
-                    </Box>
+                    <ActivityCard key={a.id} activity={a}/>
                   ))}
                 </ContainerActivitiesCenter>
               </BoxDiv>
@@ -328,55 +115,7 @@ export function ListActivity({ dateInfo }) {
                 <h1>Sala de Workshop</h1>
                 <ContainerActivitiesRight>
                   {arrayWorkshop.map((a) => (
-                    <Box
-                      key={a.id}
-                      id={a.id}
-                      disabled={!a.capacity}
-                      isActivityFull={!a.capacity}
-                      isRoomSelected={a.isSelected}
-                      sx={{
-                        marginTop: `${a.margin}px`,
-                        height: `${a.size}px`,
-                        width: '285px',
-                        marginLeft: '12px',
-                        marginRight: '12px',
-                        marginBottom: '12px',
-                        borderRadius: '5px',
-                        backgroundColor: a.Entry.length === 1 ? '#D0FFDB' : '#f1f1f1',
-                        flexDirection: 'row',
-                        display: 'flex',
-                        padding: '12px',
-                        justifyContent: 'space-around',
-                        flexShrink: 0,
-                        color: 'black',
-                      }}
-                    >
-                      <Info>
-                        <h2>{a.name}</h2>
-                        <h3>
-                          {a.startsAt}:00 - {a.endsAt}:00
-                        </h3>
-                      </Info>
-                      <Separation arrayRegister={a.Entry.length} />
-                      <InfoButton arrayRegister={a.Entry.length} onClick={() => handleClickActivity(a.id, a)}>
-                        {a.capacity === 0 ? (
-                          <>
-                            <IoCloseCircleOutline color="#CC6666" size={30} />
-                            <h5>Esgotado</h5>
-                          </>
-                        ) : a.Entry.length === 1 ? (
-                          <>
-                            <IoCheckmarkCircleOutline color="#078632" size={30} />
-                            <h4>inscrito</h4>
-                          </>
-                        ) : (
-                          <>
-                            <IoLogInOutline color="#078632" size={30} />
-                            <h4>{a.capacity} vagas</h4>
-                          </>
-                        )}
-                      </InfoButton>
-                    </Box>
+                    <ActivityCard key={a.id} activity={a}/>
                   ))}
                 </ContainerActivitiesRight>
               </BoxDiv>
