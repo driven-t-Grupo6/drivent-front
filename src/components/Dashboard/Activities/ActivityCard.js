@@ -3,22 +3,20 @@ import { BiExit } from 'react-icons/bi';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 import dayjs from 'dayjs';
 
-export function ActivityCard({ activity, entrysCount }) {
-  const vacanciesAvailable = activity.vacancies - entrysCount;
-
-  const duration = dayjs(activity.end).hour() - dayjs(activity.start).hour();
+export function ActivityCard({ activity, capacity }) {
+  const duration = dayjs(activity.endsAt).hour() - dayjs(activity.startsAt).hour();
 
   return (
     <Container duration={duration}>
       <ActivityInfo>
         <h1>{activity.name}</h1>
         <div>
-          {dayjs(activity.start).format('HH:mm')} - {dayjs(activity.end).format('HH:mm')}
+          {dayjs(activity.startsAt).format('HH:mm')} - {dayjs(activity.endsAt).format('HH:mm')}
         </div>
       </ActivityInfo>
-      <ActivityVacancy vacanciesAvailable={vacanciesAvailable}>
-        <div>{vacanciesAvailable ? <BiExit /> : <AiOutlineCloseCircle />}</div>
-        <p>{vacanciesAvailable ? `${vacanciesAvailable} vagas` : 'Esgotado'}</p>
+      <ActivityVacancy activity={activity} capacity={capacity}>
+        <div>{capacity ? <BiExit /> : <AiOutlineCloseCircle />}</div>
+        <p>{capacity ? `${capacity} vagas` : 'Esgotado'}</p>
       </ActivityVacancy>
     </Container>
   );
@@ -59,7 +57,7 @@ const ActivityVacancy = styled.div`
   justify-content: center;
   flex-direction: column;
   gap: 5px;
-  color: ${(props) => (props.vacanciesAvailable ? '#078632' : '#CC6666')};
+  color: ${(props) => (props.capacity ? '#078632' : '#CC6666')};
   font-weight: 400;
   p {
     font-size: 9px;

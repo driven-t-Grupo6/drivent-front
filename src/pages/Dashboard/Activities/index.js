@@ -1,13 +1,28 @@
-import { ActivityCard } from '../../../components/Dashboard/Activities/ActivityCard';
+import { useEffect, useState } from 'react';
+import { ListActivity } from '../../../components/Dashboard/Activities/ListActivity/index';
+import { getDatesInfo } from '../../../services/activitiesApi';
+
+import useToken from '../../../hooks/useToken';
+
 export default function Activities() {
-  const ACTIVITY = {
-    name: 'Nome da atividade',
-    vacancies: 20,
-    start: '2023-07-11 09:00:00',
-    end: '2023-07-11 10:00:00',
-  };
+  const token = useToken();
+  const [dates, setDates] = useState([]);
+  const [isLoading, setLoading] = useState(true);
 
-  const entrysCount = 20;
+  useEffect(() => {
+    handleDatabaseCalls();
+  }, []);
 
-  return <ActivityCard activity={ACTIVITY} entrysCount={entrysCount} />;
+  async function handleDatabaseCalls() {
+    try {
+      const promiseActivity = await getDatesInfo(token);
+      setDates(promiseActivity);
+
+      setLoading(false);
+    } catch {
+      setLoading(true);
+    }
+  }
+
+  return <>{isLoading ? <>Loading...</> : <ListActivity dateInfo={dates} setDates={setDates} />}</>;
 }
