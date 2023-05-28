@@ -94,6 +94,7 @@ const ContainerActivitiesLeft = styled.div`
   border-top: 1px solid #d7d7d7;
   border-bottom: 1px solid #d7d7d7;
   border-left: 1px solid #d7d7d7;
+  gap: 5px;
 
   display: flex;
   flex-direction: column;
