@@ -23,7 +23,7 @@ export function ListActivity({ dateInfo }) {
   const [arrayWorkshop, setArrayWorkshop] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [ticketPaid, setTicketPaid] = useState(false);
+  const [ticketPaid, setTicketPaid] = useState(true);
 
   function handleDateChange(d) {
     setIsLoading(true);
@@ -76,13 +76,11 @@ export function ListActivity({ dateInfo }) {
         setDateSelected(true);
       }
     }
-    console.log(dates);
     return dates;
   }
 
   return (
     <>
-      <StyledTypography variant="h4">Escolha de atividades</StyledTypography>
       {!ticketPaid ? (
         <NoPayPage />
       ) : (

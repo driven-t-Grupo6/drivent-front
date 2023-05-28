@@ -35,7 +35,7 @@ export function ActivityCard({ activity }) {
 
 const Container = styled.div`
   box-sizing: border-box;
-  font-size: 'Roboto';
+  font-style: 'Roboto', 'sans-serif';
   width: 95%;
   min-height: ${(props) => `${props.duration * 80}px`};
   background-color: #f1f1f1;
@@ -58,7 +58,7 @@ const ActivityInfo = styled.div`
   gap: 5px;
   color: #343434;
   font-weight: 400;
-  h1 {
+  h2 {
     text-transform: capitalize;
     font-weight: 700;
   }
