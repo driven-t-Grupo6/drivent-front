@@ -8,7 +8,6 @@ import {
   Button,
   BoxDiv,
 } from './style';
-import { StyledTypography } from '../../../PersonalInformationForm/index.js';
 import { getActivitiesByDate } from '../../../../services/activitiesApi';
 import { toast } from 'react-toastify';
 import useToken from '../../../../hooks/useToken';
@@ -74,13 +73,12 @@ export function ListActivity({ dateInfo }) {
         setDateSelected(true);
       }
     }
-
+    console.log(dates);
     return dates;
   }
 
   return (
     <>
-      <StyledTypography variant="h4">Escolha de atividades</StyledTypography>
       <Text isSelected={isDateSelected}>Primeiro, filtre pelo dia do evento: </Text>
       <ContainerDate>
         {dateInfo?.map((d) => (

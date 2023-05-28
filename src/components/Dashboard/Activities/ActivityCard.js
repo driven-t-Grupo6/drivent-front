@@ -16,16 +16,16 @@ export function ActivityCard({ activity }) {
   useEffect(() => {
     getEntriesByActivityId(token, activity.id).then((res) => setCapacity(capacity - res.entries));
   }, []);
-
+  console.log(activity);
   function entry() {}
 
   return (
     <Container capacity={capacity} duration={duration}>
       <ActivityInfo>
-        <h1>{activity.name}</h1>
-        <div>
+        <h2>{activity.name}</h2>
+        <h3>
           {startsAt.format('HH:mm')} - {endsAt.format('HH:mm')}
-        </div>
+        </h3>
       </ActivityInfo>
       <ActivityVacancy activity={activity} capacity={capacity}>
         <div>{capacity ? <BiExit /> : <AiOutlineCloseCircle />}</div>
@@ -39,7 +39,7 @@ const Container = styled.div`
   box-sizing: border-box;
   font-size: 'Roboto';
   width: 95%;
-  min-height: ${(props) => `${props.duration * 79}px`};
+  min-height: ${(props) => `${props.duration * 80}px`};
   background-color: #f1f1f1;
   border-radius: 5px;
   display: flex;
@@ -54,7 +54,7 @@ const ActivityInfo = styled.div`
   font-size: 12px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
   color: #343434;
   font-weight: 400;
   h1 {

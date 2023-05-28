@@ -50,7 +50,7 @@ const Button = styled.button`
   line-height: 20px;
   text-align: center;
 
-  background-color: ${({ isDateSelected }) => (isDateSelected ? '#FFD37D' : '#F1F1F1')};
+  background-color: ${({ isDateSelected }) => (isDateSelected ? '#FFD37D' : '#E0E0E0')};
 
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
 
@@ -95,7 +95,6 @@ const ContainerActivitiesLeft = styled.div`
   flex-direction: column;
   flex-flow: column;
   align-items: center;
-  gap: 10px;
 
   overflow-y: auto;
   ::-webkit-scrollbar {
@@ -128,7 +127,6 @@ const ContainerActivitiesRight = styled.div`
   flex-direction: column;
   flex-flow: column;
   align-items: center;
-  gap: 10px;
 
   overflow: auto;
   ::-webkit-scrollbar {
@@ -159,7 +157,6 @@ const ContainerActivitiesCenter = styled.div`
   flex-direction: column;
   flex-flow: column;
   align-items: center;
-  gap: 10px;
 
   overflow: auto;
   ::-webkit-scrollbar {
@@ -185,8 +182,24 @@ const BoxDiv = styled.div`
   }
 
   h1 {
-    color: #7b7b7b;
+    color:#7b7b7b;
     margin-bottom: 13px;
+  }
+  h2 {
+    font-family: 'Roboto';
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 14px;
+    text-align: left;
+    color: #343434;
+  }
+  h3{
+    font-family: 'Roboto';
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 14px;
+    text-align: left;
+    color: #343434;
   }
 
   @media (max-width: 840px) {
