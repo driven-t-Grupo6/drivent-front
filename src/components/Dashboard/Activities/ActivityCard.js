@@ -17,8 +17,6 @@ export function ActivityCard({ activity }) {
     getEntriesByActivityId(token, activity.id).then((res) => setCapacity(capacity - res.entries));
   }, []);
 
-  function entry() {}
-
   return (
     <Container capacity={capacity} duration={duration}>
       <ActivityInfo>
@@ -47,6 +45,9 @@ const Container = styled.div`
   padding: 10px;
   gap: 15px;
   cursor: ${(props) => (props.capacity ? 'pointer' : 'default')};
+  :hover {
+    background-color: #dfdfdf;
+  }
 `;
 
 const ActivityInfo = styled.div`
@@ -58,6 +59,7 @@ const ActivityInfo = styled.div`
   color: #343434;
   font-weight: 400;
   h1 {
+    text-transform: capitalize;
     font-weight: 700;
   }
   padding: 5px;

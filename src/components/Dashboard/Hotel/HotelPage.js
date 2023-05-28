@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import useToken from '../../../hooks/useToken';
-import { StyledTypography } from '../../PersonalInformationForm';
 import { getTickets } from '../../../services/ticketApi';
 import { getBooking } from '../../../services/bookingApi';
 import { ListHotels } from './HotelList';
@@ -13,6 +12,7 @@ export default function Hotels({ booking, setBooking, changeBookingStatus }) {
   const [ticketStatus, setTicketStatus] = useState(true);
   const [ticket, setTicket] = useState();
   const [updateBooking, setUpdateBooking] = useState(false);
+  const [load, setLoad] = useState(true);
 
   useEffect(() => {
     getTickets(token)
@@ -20,7 +20,7 @@ export default function Hotels({ booking, setBooking, changeBookingStatus }) {
         const TicketType = res.TicketType;
 
         if (res.status === 'PAID') setTicketStatus(true);
-        if (TicketType.isRemote || TicketType.includesHotel) setRemoteStatus(true);
+        if (TicketType.isRemote || !TicketType.includesHotel) setRemoteStatus(true);
         setTicket(res);
       })
       .catch((error) => {
@@ -33,28 +33,37 @@ export default function Hotels({ booking, setBooking, changeBookingStatus }) {
       .catch((error) => {
         if (error.status === 404) setBooking(false);
       });
+    setLoad(false);
   }, [updateBooking]);
 
-  if (!ticket) return <>Loading...</>;
+  if (load) return <>Loading...</>;
+
+  if (!ticket || !ticketStatus)
+    return (
+      <Container>
+        <Text>Você precisa ter confirmado pagamento antes de fazer a escolha de hospedagem.</Text>
+      </Container>
+    );
+
+  if (remoteStatus)
+    return (
+      <Container>
+        <Text>
+          Sua modalidade de ingresso não inclui hospedagem.
+          <br />
+          Prossiga para a escolha de atividades.
+        </Text>
+      </Container>
+    );
 
   return (
     <>
-      <StyledTypography variant="h4"> Escolha de hotel e quarto </StyledTypography>
-      {!ticket || !ticketStatus ? (
-        <Container>
-          <Text>Você precisa ter confirmado pagamento antes de fazer a escolha de hospedagem.</Text>
-        </Container>
-      ) : !remoteStatus ? (
-        <Container>
-          <Text>
-            Sua modalidade de ingresso não inclui hospedagem.
-            <br />
-            Prossiga para a escolha de atividades.
-          </Text>
-        </Container>
-      ) : (
-        <ListHotels booking={booking} token={token} setUpdateBooking={setUpdateBooking} changeBookingStatus={changeBookingStatus} />
-      )}
+      <ListHotels
+        booking={booking}
+        token={token}
+        setUpdateBooking={setUpdateBooking}
+        changeBookingStatus={changeBookingStatus}
+      />
     </>
   );
 }

@@ -23,16 +23,23 @@ const Button = styled.button`
   border-radius: 20px;
   border: ${({ active }) => (active ? 'none' : '1px solid #cecece')};
   margin-top: 20px;
+
   :last-child {
     margin-left: 20px;
   }
+
   cursor: pointer;
+  :hover {
+    background-color: #ececec;
+  }
+
   h5 {
     font-family: 'Roboto';
     font-size: 16px;
     text-align: center;
     color: #454545;
   }
+
   p {
     font-family: 'Roboto';
     font-size: 14px;

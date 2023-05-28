@@ -25,8 +25,14 @@ const Button = styled.div`
   background: #e0e0e0;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
   border-radius: 4px;
+
+  :hover {
+    box-shadow: 1px 1px 1px 1px #ececec;
+  }
+
   cursor: pointer;
   margin-top: 20px;
+
   h5 {
     font-family: 'Roboto';
     font-style: normal;
