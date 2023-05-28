@@ -42,6 +42,11 @@ export const HotelContainer = styled.div`
 
   font-family: 'Roboto';
 
+  :hover {
+    background: ${(props) => (!props.selected ? '#dfdfdf' : '#ffeed2')};
+    cursor: ${(props) => (props.selected ? 'default' : 'pointer')};
+  }
+
   h2 {
     font-family: 'Roboto';
     font-weight: 700;
@@ -101,6 +106,10 @@ export const Button = styled.div`
     font-size: 12px;
     line-height: 16px;
     color: #000000;
+  }
+
+  :hover {
+    box-shadow: 1px 1px 1px 1px #ececec;  
   }
 `;
 

@@ -64,6 +64,10 @@ const Button = styled.button`
   }
 
   cursor: pointer;
+
+  :hover {
+    box-shadow: 1px 1px 1px 1px #ececec;
+  }
 `;
 
 const Container = styled.div`

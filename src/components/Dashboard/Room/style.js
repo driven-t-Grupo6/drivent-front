@@ -12,12 +12,18 @@ export const Room = styled.div`
   border: 1px solid #cecece;
   border-radius: 10px;
   background-color: ${(props) => (props.isUserBooking ? '#FFEED2' : props.isFilled ? '#CECECE' : 'none')};
+
   p {
     font-family: 'Roboto';
     font-weight: 700;
     font-size: 20px;
     text-align: center;
     color: #454545;
+  }
+
+  :hover {
+    background: ${(props) => (!props.isUserBooking ? '#ececec' : '#ffeed2')};
+    cursor: ${(props) => (props.isUserBooking ? 'default' : 'pointer')};
   }
 `;
 
