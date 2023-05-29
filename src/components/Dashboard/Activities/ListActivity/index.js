@@ -14,16 +14,33 @@ import useToken from '../../../../hooks/useToken';
 import { useState } from 'react';
 import { ActivityCard } from '../ActivityCard';
 import NoPayPage from '../NoPayPage';
+import { useEffect } from 'react';
+import { getEntriesByUserId } from '../../../../services/entriesApi';
+import { getTickets } from '../../../../services/ticketApi';
 
 export function ListActivity({ dateInfo }) {
   const token = useToken();
   const [isDateSelected, setDateSelected] = useState(false);
+  const [userEntries, setUserEntries] = useState([]);
   const [arrayPrincipal, setArrayPrincipal] = useState([]);
   const [arrayLateral, setArrayLateral] = useState([]);
   const [arrayWorkshop, setArrayWorkshop] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [ticketPaid, setTicketPaid] = useState(true);
+  const [ticketPaid, setTicketPaid] = useState(false);
+
+  useEffect(() => {
+    getTickets(token)
+      .then((res) => {
+        console.log(res);
+        if (res.status === 'PAID') setTicketPaid(true);
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      });
+    getEntriesByUserId(token).then((res) => setUserEntries(res));
+  }, []);
 
   function handleDateChange(d) {
     setIsLoading(true);
@@ -79,55 +96,51 @@ export function ListActivity({ dateInfo }) {
     return dates;
   }
 
+  if (!ticketPaid) return <NoPayPage />;
+
   return (
     <>
-      {!ticketPaid ? (
-        <NoPayPage />
-      ) : (
-        <>
-          <Text isSelected={isDateSelected}>Primeiro, filtre pelo dia do evento: </Text>
-          <ContainerDate>
-            {dateInfo?.map((d) => (
-              <Button key={d.id} onClick={() => handleDateChange(d)} isDateSelected={d.isSelected}>
-                {d.day}
-              </Button>
-            ))}
-          </ContainerDate>
-          {isDateSelected && (
-            <Container>
-              {isLoading ? (
-                <>Loading...</>
-              ) : (
-                <>
-                  <BoxDiv>
-                    <h1>Auditório Principal</h1>
-                    <ContainerActivitiesLeft>
-                      {arrayPrincipal.map((a) => (
-                        <ActivityCard key={a.id} activity={a} />
-                      ))}
-                    </ContainerActivitiesLeft>
-                  </BoxDiv>
-                  <BoxDiv>
-                    <h1>Auditório Lateral</h1>
-                    <ContainerActivitiesCenter>
-                      {arrayLateral.map((a) => (
-                        <ActivityCard key={a.id} activity={a} />
-                      ))}
-                    </ContainerActivitiesCenter>
-                  </BoxDiv>
-                  <BoxDiv>
-                    <h1>Sala de Workshop</h1>
-                    <ContainerActivitiesRight>
-                      {arrayWorkshop.map((a) => (
-                        <ActivityCard key={a.id} activity={a} />
-                      ))}
-                    </ContainerActivitiesRight>
-                  </BoxDiv>
-                </>
-              )}
-            </Container>
+      <Text isSelected={isDateSelected}>Primeiro, filtre pelo dia do evento: </Text>
+      <ContainerDate>
+        {dateInfo?.map((d) => (
+          <Button key={d.id} onClick={() => handleDateChange(d)} isDateSelected={d.isSelected}>
+            {d.day}
+          </Button>
+        ))}
+      </ContainerDate>
+      {isDateSelected && (
+        <Container>
+          {isLoading ? (
+            <>Loading...</>
+          ) : (
+            <>
+              <BoxDiv>
+                <h1>Auditório Principal</h1>
+                <ContainerActivitiesLeft>
+                  {arrayPrincipal.map((a) => (
+                    <ActivityCard userEntries={userEntries} key={a.id} activity={a} />
+                  ))}
+                </ContainerActivitiesLeft>
+              </BoxDiv>
+              <BoxDiv>
+                <h1>Auditório Lateral</h1>
+                <ContainerActivitiesCenter>
+                  {arrayLateral.map((a) => (
+                    <ActivityCard userEntries={userEntries} key={a.id} activity={a} />
+                  ))}
+                </ContainerActivitiesCenter>
+              </BoxDiv>
+              <BoxDiv>
+                <h1>Sala de Workshop</h1>
+                <ContainerActivitiesRight>
+                  {arrayWorkshop.map((a) => (
+                    <ActivityCard userEntries={userEntries} key={a.id} activity={a} />
+                  ))}
+                </ContainerActivitiesRight>
+              </BoxDiv>
+            </>
           )}
-        </>
+        </Container>
       )}
     </>
   );
