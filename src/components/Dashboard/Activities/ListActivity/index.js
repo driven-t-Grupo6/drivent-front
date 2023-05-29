@@ -32,7 +32,6 @@ export function ListActivity({ dateInfo }) {
   useEffect(() => {
     getTickets(token)
       .then((res) => {
-        console.log(res);
         if (res.status === 'PAID') setTicketPaid(true);
       })
       .catch((error) => {
@@ -40,7 +39,7 @@ export function ListActivity({ dateInfo }) {
         console.error(error);
       });
     getEntriesByUserId(token).then((res) => setUserEntries(res));
-  }, []);
+  }, [isLoading]);
 
   function handleDateChange(d) {
     setIsLoading(true);

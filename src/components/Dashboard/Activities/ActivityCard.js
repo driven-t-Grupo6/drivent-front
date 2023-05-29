@@ -30,8 +30,8 @@ export function ActivityCard({ userEntries, activity }) {
       })
       .catch((err) => {
         setLoad(false);
-        // eslint-disable-next-line no-console
-        console.error(err);
+        console.log({ ...err });
+        if (err.response.status === 409) alert(err.response.data.message);
       });
   }
 
