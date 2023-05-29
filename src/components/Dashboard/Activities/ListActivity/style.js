@@ -127,6 +127,7 @@ const ContainerActivitiesRight = styled.div`
   border-top: 1px solid #d7d7d7;
   border-bottom: 1px solid #d7d7d7;
   border-right: 1px solid #d7d7d7;
+  gap: 5px;
 
   display: flex;
   flex-direction: column;
@@ -157,6 +158,7 @@ const ContainerActivitiesCenter = styled.div`
   padding: 10px 0;
 
   border: 1px solid #d7d7d7;
+  gap: 5px;
 
   display: flex;
   flex-direction: column;
@@ -187,7 +189,7 @@ const BoxDiv = styled.div`
   }
 
   h1 {
-    color:#7b7b7b;
+    color: #7b7b7b;
     margin-bottom: 13px;
   }
   h2 {
@@ -198,7 +200,7 @@ const BoxDiv = styled.div`
     text-align: left;
     color: #343434;
   }
-  h3{
+  h3 {
     font-family: 'Roboto';
     font-size: 12px;
     font-weight: 400;
